@@ -26,6 +26,7 @@ public class WalmartSearch {
 	static ArrayList<String> productLink = new ArrayList<>();
 	static ArrayList<String> productPrice = new ArrayList<>();
 	static ArrayList<String> productQuantity = new ArrayList<>();
+	static ArrayList<String> productNames = new ArrayList<>();
 	
 	public static void main(String[] args) throws Exception {
 		Scanner sc = new Scanner(System.in);
@@ -36,6 +37,7 @@ public class WalmartSearch {
 			generatePage(search);	// generate URL
 			getPage(page);			// get html page
 			searchResults();		// get search results
+			productNames();			// fix products names
 			iterateProducts();		// print products
 			options(sc);			// select option
 			if(userOption.matches("Q")) {
@@ -103,20 +105,32 @@ public class WalmartSearch {
 		
 	}
 	
+	public static void productNames() {
+		Iterator <String> productIterator = productLink.iterator(); 
+				
+		while(productIterator.hasNext()) {
+			// simplify product description
+			String productName = productIterator.next().replace("/ip/","");
+			String t1 [] = productName.split("/");
+			productName = t1[0];
+			productName = productName.replace("-", " ");
+			productNames.add(productName);
+		}
+	}
+	
 	public static void iterateProducts() {
 		// READ PRODUCT LINKS
-
 		int itemNumber = 0;
 				
-		Iterator <String> productIterator = productLink.iterator(); 
+		Iterator <String> productIterator = productNames.iterator(); 
 		Iterator <String> priceIterator = productPrice.iterator();
 		Iterator <String> quantityIterator = productQuantity.iterator();
 				
 		while(productIterator.hasNext()) {
 			itemNumber += 1;	
 			System.out.println("(" +  itemNumber + ")");
-			// simplify product discription
-			System.out.println("Link: " + "https://www.walmart.com/" + productIterator.next());
+			// simplify product description
+			System.out.println("Product: " + productIterator.next());
 			System.out.println("Price: " + priceIterator.next());
 			System.out.println("Stock: " + quantityIterator.next());
 			System.out.println();
