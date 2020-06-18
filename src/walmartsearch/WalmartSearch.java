@@ -4,9 +4,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.Scanner;
 
@@ -49,6 +47,7 @@ public class WalmartSearch {
 			userOption = sc.next();
 			userOption = userOption.toUpperCase();
 			if(userOption.matches("S")) {
+				clearArrays();
 				sc.nextLine();	// clear scanner
 				continue;
 			} else if(userOption.matches("Q")) {
@@ -141,17 +140,17 @@ public class WalmartSearch {
 		String link = "https://www.walmart.com/" + productLink.get(selection); 
 		productLink.clear();	// clear product list
 		getPage(link);
-		System.out.println("\nPrice: " + productPrice.get(selection));
+		System.out.println("\nProduct: " + productNames.get(selection));
+		System.out.println("Price: " + productPrice.get(selection));
 		productPrice.clear();	// clear price list
 		productQuantity.clear();	// clear quantity list
 		// in stock?
 		if(html.contains("Add to cart")) {
 			// maybe put the date?
-			System.out.println("Product is in stock");
+			System.out.println("*** Product is in stock ***\n");
 		} else {
-			System.out.println("Product is in not in stock");
+			System.out.println("*** Product is in not in stock ***\n");
 		}
-
 	}
 	
 	public static void options(Scanner sc) {
@@ -169,5 +168,10 @@ public class WalmartSearch {
 			selection = Integer.parseInt(userOption);
 			selection = selection - 1;
 		}
+	}
+	
+	public static void clearArrays() {
+		productPrice.clear();
+		productNames.clear();
 	}
 }
