@@ -16,6 +16,8 @@ public class WalmartSearch {
 	static String page = "";
 	static boolean start = true; 
 	static boolean inStock = false;
+	static int selection = 0;
+	static String userOption = "";
 	static String product = "productPageUrl\":\"";
 	static String price = "\"offerPrice\":";
 	static String quantity = "\"quantity\":";
@@ -27,25 +29,40 @@ public class WalmartSearch {
 	
 	public static void main(String[] args) throws Exception {
 		Scanner sc = new Scanner(System.in);
-		System.out.print("Enter search keywords: ");
-		search = sc.nextLine();
-		// generate url
-		generatePage(search);
-		// get html page
-		getPage(page);
-		searchResults();
-		iterateProducts();
-		System.out.print("Press 'Q' to quit or select a product: ");
-		int selection = sc.nextInt();
-		// quit (set boolean [start] to false) or check location availablity
-		selectProduct(selection - 1);
-		
-		
-//		while(start) {
-//			getPage(search);
-//			System.out.println();
-//		}
+		programTitle();
+		while(start) {
+			System.out.print("Enter search keywords: ");
+			search = sc.nextLine();
+			generatePage(search);	// generate URL
+			getPage(page);			// get html page
+			searchResults();		// get search results
+			iterateProducts();		// print products
+			options(sc);			// select option
+			if(userOption.matches("Q")) {
+				break;
+			} else {
+				selectProduct(selection);	// select product 		
+			}
+			System.out.println("Type 'S' for a new search or 'Q' to quit");
+			userOption = sc.next();
+			userOption = userOption.toUpperCase();
+			if(userOption.matches("S")) {
+				sc.nextLine();	// clear scanner
+				continue;
+			} else if(userOption.matches("Q")) {
+				start = false;
+			}
+		}
+		System.out.println("Goodbye");
 		sc.close();
+	}
+	
+	public static void programTitle() {
+		System.out.println("*--------------------------------------*");
+		System.out.println("|                                      |");
+		System.out.println("|       Walmart Inventory Search       |");
+		System.out.println("|                                      |");
+		System.out.println("*--------------------------------------*");
 	}
 	
 	public static void generatePage(String search) {
@@ -53,6 +70,7 @@ public class WalmartSearch {
 			search = search.replace(" ", "%20");
 		}
 		page = "https://www.walmart.com/search/?query=" + search;
+		search = "";	// clear search
 	}
 	
 	public static void getPage(String page) throws Exception {
@@ -119,11 +137,23 @@ public class WalmartSearch {
 		} else {
 			System.out.println("Product is in not in stock");
 		}
-		
-		
-		
-		
+
 	}
-
-
+	
+	public static void options(Scanner sc) {
+		System.out.print("---------------------------------------------------------------------"
+				+ "--------------------------------------------\n");
+		System.out.print("Press 'Q' to quit or select a product: ");
+		
+		userOption = sc.next();
+		userOption = userOption.toUpperCase();
+		if(userOption.matches("Q")) {
+			// Quit
+			
+		} else {
+			// it's a number
+			selection = Integer.parseInt(userOption);
+			selection = selection - 1;
+		}
+	}
 }
