@@ -64,7 +64,7 @@ public class WalmartSearch {
 			}
 			
 		}
-		System.out.println("Goodbye");
+		System.out.println("\nGoodbye");
 		sc.close();
 	}
 	
@@ -181,7 +181,7 @@ public class WalmartSearch {
 					// it's a number
 					selection = Integer.parseInt(userOption);
 					selection = selection - 1;
-					if(selection >= totalProducts && selection <= totalProducts) {
+					if(selection >= totalProducts || selection <= totalProducts) {
 						restart = false;	
 					} else {
 						System.out.println("Invalid selection");
