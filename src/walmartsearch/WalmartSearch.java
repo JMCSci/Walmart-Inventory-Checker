@@ -28,6 +28,7 @@ public class WalmartSearch {
 	
 	public static void main(String[] args) throws Exception {
 		Scanner sc = new Scanner(System.in);
+		boolean restart = true;
 		programTitle();
 		while(start) {
 			System.out.print("Enter search keywords: ");
@@ -43,16 +44,25 @@ public class WalmartSearch {
 			} else {
 				selectProduct(selection);	// select product 		
 			}
-			System.out.println("Type 'S' for a new search or 'Q' to quit");
-			userOption = sc.next();
-			userOption = userOption.toUpperCase();
-			if(userOption.matches("S")) {
-				clearArrays();
-				sc.nextLine();	// clear scanner
-				continue;
-			} else if(userOption.matches("Q")) {
-				start = false;
+			/* Restart selection loop if "S" or "Q" is not selected */
+			while(restart) {
+				System.out.println("Type 'S' for a new search or 'Q' to quit");
+				userOption = sc.next();
+				userOption = userOption.toUpperCase();
+				if(userOption.matches("S")) {
+					clearArrays();
+					sc.nextLine();	// clear scanner
+					restart = false;
+					start = true;
+				} else if(userOption.matches("Q")) {
+					restart = false;
+					start = false;
+				} else {
+					System.out.println("Incorrect selection");
+					restart = true;
+				}
 			}
+			
 		}
 		System.out.println("Goodbye");
 		sc.close();
@@ -154,20 +164,36 @@ public class WalmartSearch {
 	}
 	
 	public static void options(Scanner sc) {
+		boolean restart = true;
+		int totalProducts = productNames.size() - 1;
 		System.out.print("---------------------------------------------------------------------"
 				+ "--------------------------------------------\n");
-		System.out.print("Press 'Q' to quit or select a product: ");
-		
-		userOption = sc.next();
-		userOption = userOption.toUpperCase();
-		if(userOption.matches("Q")) {
-			// Quit
-			
-		} else {
-			// it's a number
-			selection = Integer.parseInt(userOption);
-			selection = selection - 1;
+		/* Restart selection loop if "Q" or a number is not selected */
+		while(restart) {
+			try {
+				System.out.print("Press 'Q' to quit or select a product: ");
+				userOption = sc.next();
+				userOption = userOption.toUpperCase();
+				if(userOption.matches("Q")) {
+					// Quit
+					return;
+				} else {
+					// it's a number
+					selection = Integer.parseInt(userOption);
+					selection = selection - 1;
+					if(selection >= totalProducts && selection <= totalProducts) {
+						restart = false;	
+					} else {
+						System.out.println("Invalid selection");
+						restart = true;
+					}
+				}  
+			} catch(NumberFormatException ex) {
+				System.out.println("Invalid selection");
+				restart = true;
+			}
 		}
+		
 	}
 	
 	public static void clearArrays() {
