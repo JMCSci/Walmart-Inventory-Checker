@@ -7,6 +7,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Scanner;
+import java.awt.Desktop;
+import java.net.URI;
 
 public class WalmartSearch {
 	static String html = "";
@@ -36,13 +38,14 @@ public class WalmartSearch {
 			generatePage(search);	// generate URL
 			getPage(page);			// get html page
 			searchResults();		// get search results
-			productNames();			// fix products names
+			productNames();			// format products names
 			iterateProducts();		// print products
 			options(sc);			// select option
 			if(userOption.matches("Q")) {
 				break;
 			} else {
-				selectProduct(selection);	// select product 		
+				selectProduct(sc, selection);	// select product 
+				restart = true;
 			}
 			/* Restart selection loop if "S" or "Q" is not selected */
 			while(restart) {
@@ -146,7 +149,7 @@ public class WalmartSearch {
 		}
 	}
 	
-	public static void selectProduct(int selection) throws Exception {
+	public static void selectProduct(Scanner sc, int selection) throws Exception {
 		String link = "https://www.walmart.com/" + productLink.get(selection); 
 		productLink.clear();	// clear product list
 		getPage(link);
@@ -161,6 +164,18 @@ public class WalmartSearch {
 		} else {
 			System.out.println("*** Product is in not in stock ***\n");
 		}
+		viewPage(sc, link);
+	}
+	
+	public static void viewPage(Scanner sc, String link) throws Exception {
+		System.out.println("Do you want to view the product in your default web browser? Yes or No?");
+		String browserSelection = sc.next();
+		browserSelection = browserSelection.toUpperCase();
+		if(browserSelection.matches("YES") || browserSelection.matches("Y")) {
+			URI uri = new URI(link);
+			Desktop desktop = Desktop.getDesktop();
+			desktop.browse(uri);
+		} 
 	}
 	
 	public static void options(Scanner sc) {
