@@ -193,18 +193,19 @@ public class WalmartSearch {
 					// Quit
 					return;
 				} else {
-					// it's a number
+					// it's a number or another letter
 					selection = Integer.parseInt(userOption);
 					selection = selection - 1;
-					if(selection >= totalProducts || selection <= totalProducts) {
+					if(selection > 0 && selection <= totalProducts) {
 						restart = false;	
 					} else {
 						System.out.println("Invalid selection");
 						restart = true;
 					}
-				}  
+				}
+				sc.nextLine();
 			} catch(NumberFormatException ex) {
-				System.out.println("Invalid selection");
+				System.out.println("Invalid selection. Please enter a number.");
 				restart = true;
 			}
 		}
