@@ -99,7 +99,7 @@ public class WalmartSearch {
 		reader.close();
 	}
 	
-	public static void searchResults() {
+	public static void searchResults() {				
 		String [] tokens1 = html.split(product);
 		String [] tokens2 = html.split(price);
 		String [] tokens3 = html.split(quantity);
